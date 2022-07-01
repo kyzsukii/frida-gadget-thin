@@ -1,4 +1,4 @@
-name: "My personal frida-gadget with small size"
+name: "My personal frida-gadget with small size (arm)"
 
 on:
   workflow_dispatch:
@@ -56,43 +56,19 @@ jobs:
           git am ../../frida-gadget-thin/patches/frida/frida-core/*.patch
           cd ../
           git apply ../frida-gadget-thin/patches/frida/thin/config_mk.patch
-          make core-android-arm64
           make core-android-arm
-          make core-android-x86
-          make core-android-x86_64
 
       - name: Package build result for Android
         shell: bash
         run: |
           pushd frida
           
-          xz build/frida-android-arm64/lib/frida/64/frida-gadget.so        
           xz build/frida-android-arm/lib/frida/32/frida-gadget.so
-          xz build/frida-android-x86/lib/frida/32/frida-gadget.so
-          xz build/frida-android-x86_64/lib/frida/64/frida-gadget.so
 
           popd
-
-      - name: Upload frida-gadget-arm64
-        uses: actions/upload-artifact@v3
-        with:
-          name: frida-gadget-arm64.xz
-          path: frida/build/frida-android-arm64/lib/frida/64/frida-gadget.so.xz
 
       - name: Upload frida-gadget-arm
         uses: actions/upload-artifact@v3
         with:
           name: frida-gadget-arm.xz
           path: frida/build/frida-android-arm/lib/frida/32/frida-gadget.so.xz
-
-      - name: Upload frida-gadget-x86
-        uses: actions/upload-artifact@v3
-        with:
-          name: frida-gadget-x86.xz
-          path: frida/build/frida-android-x86/lib/frida/32/frida-gadget.so.xz
-
-      - name: Upload frida-gadget-x86_64
-        uses: actions/upload-artifact@v3
-        with:
-          name: frida-gadget-x86_64.xz
-          path: frida/build/frida-android-x86_64/lib/frida/64/frida-gadget.so.xz
